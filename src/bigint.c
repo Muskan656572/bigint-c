@@ -100,3 +100,40 @@ void bigint_print ( const BigInt *num ) {
     }
     printf("\n");
 }
+
+int bigint_compare ( const BigInt *num1, const BigInt *num2 ) {
+
+    if ( num1 == NULL || num2 == NULL ) return 0;
+    
+    // case1: different signs
+    if ( num1->sign != num2->sign ) {
+        if ( num1->sign == 1 ) return 1;
+        else return -1;
+    }
+
+    // case2 : same sign (positives)
+    if ( num1->sign == 1 ) {
+        // firsty check their lengths difference
+        if ( num1->size > num2->size ) return 1;
+        if ( num1->size < num2->size ) return -1;
+    }
+    // (negatives)
+    else{
+        if ( num1->size < num2->size ) return 1;
+        if ( num1->size > num2->size) return -1;
+    }
+
+    // case3: same lengths
+    for ( int i = num1->size-1; i >= 0; i-- ) {
+        if ( num1->digits[i] > num2->digits[i] ) {
+            if ( num1->sign == 1 ) return 1;
+            else return -1;
+        }
+        if ( num1->digits[i] < num2->digits[i] ) {
+            if ( num2->sign == 1) return -1;
+            else return 1;
+        }
+    }
+    return 0;
+    
+}
