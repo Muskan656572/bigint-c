@@ -35,8 +35,30 @@ int main(void)
     // bigint_print(number);
     // bigint_free(number);
 
-    BigInt *number1 = bigint_from_string("-100");
-    BigInt *number2 = bigint_from_string("20");
+    // BigInt *number1 = bigint_from_string("-100");
+    // BigInt *number2 = bigint_from_string("20");
+
+    // if ( number1 == NULL || number2 == NULL ) {
+    //     printf("Failed to create BigInt\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // int result = bigint_compare(number1, number2);
+    // if ( result > 0 ) {
+    //     printf ( "number1 is greater than number2\n");
+    // }
+    // else if (result < 0) {
+    //     printf("number1 is less than number2\n");
+    // } else {
+    //     printf("number1 is equal to number2\n");
+    // }
+    // bigint_free(number1);
+    // bigint_free(number2);
+
+    BigInt *number1 = bigint_from_string("999999999999999999999999");
+    BigInt *number2 = bigint_from_string("1");
 
     if ( number1 == NULL || number2 == NULL ) {
         printf("Failed to create BigInt\n");
@@ -45,16 +67,20 @@ int main(void)
         return 1;
     }
 
-    int result = bigint_compare(number1, number2);
-    if ( result > 0 ) {
-        printf ( "number1 is greater than number2\n");
+    BigInt *result = bigint_add(number1, number2);
+    if ( result == NULL ) {
+        printf("Addition failed\n");
+        bigint_free(number1);
+        bigint_free(number2);
+        return 1;
     }
-    else if (result < 0) {
-        printf("number1 is less than number2\n");
-    } else {
-        printf("number1 is equal to number2\n");
-    }
-    bigint_free(number1);
-    bigint_free(number2);
+
+    printf("Number1 = ");
+    bigint_print(number1);
+    printf("\nNumber2 = ");
+    bigint_print(number2);
+    printf("\nNumber1 + number2 = ");
+    bigint_print(result);
+    printf("\n");
     return 0;
 }
