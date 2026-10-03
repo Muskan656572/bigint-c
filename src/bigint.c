@@ -277,6 +277,45 @@ BigInt *bigint_add ( const BigInt *num1, const BigInt *num2 ) {
     result->sign = num2->sign;
     return result;
 
+}
 
+BigInt *bigint_substract ( const BigInt *num1, const BigInt *num2 ) {
+    if ( num1 == NULL || num2 == NULL ) return NULL;
 
+    // case1: Different Signs
+    if ( num1->sign != num2->sign ) {
+        BigInt *result = bigint_add_abs(num1, num2);
+        if ( result == NULL ) {
+            return NULL;
+        }
+        result->sign = num1->sign;
+        return result;
+    } 
+
+    // case2: Same signs
+
+    int comparison = bigint_compare_abs(num1, num2);
+    if ( comparison == 0 ) {
+        BigInt *result = bigint_create();
+        if ( result == NULL ) return NULL;
+        result->digits[0] = 0;
+        result->size = 1;
+        result->sign = 1;
+        return result;
+    }
+
+    // |num1| > |num2|
+
+    if ( comparison > 0 ) {
+        BigInt *result = bigint_sub_abs(num1, num2);
+        if ( result == NULL ) return NULL;
+        result->sign = num1->sign;
+        return result;
+    }
+
+    // |num1| < |num2|
+    BigInt *result = bigint_sub_abs(num2, num1);
+    if ( result == NULL ) return NULL;
+    result->sign = -num1->sign;
+    return result;
 }

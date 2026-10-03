@@ -3,6 +3,9 @@
 
 int main(void)
 {
+
+    //  memory allocation to BigInt structure in heap
+
     // BigInt *number = bigint_create();
 
     // if (number == NULL) {
@@ -14,7 +17,11 @@ int main(void)
     // printf("Size: %d\n", number->size);
     // printf("Capacity: %d\n", number->capacity);
     // printf("Sign: %d\n", number->sign);
-    // printf("First digit: %d\n", number->digits[0]);
+    // printf("First digit: %d\n", number->digits[0]);.
+
+// ----------------------------------------------------------------------
+
+    // create BigInt from string and also free the space of that
 
     // BigInt *number = bigint_from_string("");
 
@@ -34,6 +41,10 @@ int main(void)
     // printf("\n");
     // bigint_print(number);
     // bigint_free(number);
+
+// --------------------------------------------------------------------------------
+
+    //  Compare 2 BigInt numbers
 
     // BigInt *number1 = bigint_from_string("-100");
     // BigInt *number2 = bigint_from_string("20");
@@ -57,8 +68,43 @@ int main(void)
     // bigint_free(number1);
     // bigint_free(number2);
 
-    BigInt *number1 = bigint_from_string("999999999999999999999999");
-    BigInt *number2 = bigint_from_string("1");
+// --------------------------------------------------------------------------------------------
+
+    // .Addition of 2 BigInt Numbers:
+
+    // BigInt *number1 = bigint_from_string("999999999999999999999999");
+    // BigInt *number2 = bigint_from_string("1");
+
+    // if ( number1 == NULL || number2 == NULL ) {
+    //     printf("Failed to create BigInt\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // BigInt *result = bigint_add(number1, number2);
+    // if ( result == NULL ) {
+    //     printf("Addition failed\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // printf("Number1 = ");
+    // bigint_print(number1);
+    // printf("\nNumber2 = ");
+    // bigint_print(number2);
+    // printf("\nNumber1 + number2 = ");
+    // bigint_print(result);
+    // printf("\n");
+    // return 0;
+
+// -------------------------------------------------------------------------------------------------------
+
+    // Ṣubstraction of 2 BigInt Numbers:
+
+    BigInt *number1 = bigint_from_string("23");
+    BigInt *number2 = bigint_from_string("123");
 
     if ( number1 == NULL || number2 == NULL ) {
         printf("Failed to create BigInt\n");
@@ -67,9 +113,9 @@ int main(void)
         return 1;
     }
 
-    BigInt *result = bigint_add(number1, number2);
+    BigInt *result = bigint_substract(number1, number2);
     if ( result == NULL ) {
-        printf("Addition failed\n");
+        printf("Substraction failed\n");
         bigint_free(number1);
         bigint_free(number2);
         return 1;
@@ -79,7 +125,7 @@ int main(void)
     bigint_print(number1);
     printf("\nNumber2 = ");
     bigint_print(number2);
-    printf("\nNumber1 + number2 = ");
+    printf("\nNumber1 - number2 = ");
     bigint_print(result);
     printf("\n");
     return 0;
