@@ -319,3 +319,48 @@ BigInt *bigint_substract ( const BigInt *num1, const BigInt *num2 ) {
     result->sign = -num1->sign;
     return result;
 }
+
+BigInt *bigint_multiply ( const BigInt *num1, const BigInt *num2 ) {
+
+    if ( num1 == NULL || num2 == NULL ) return NULL;
+    BigInt *result = bigint_create();
+    if ( result == NULL ) return NULL;
+
+    int required_size = num1->size + num2->size;
+
+    if ( required_size > result->capacity ) {
+        int *new_digits = realloc(result->digits, required_size * sizeof(int));
+
+        if ( new_digits == NULL ) {
+            bigint_free(result);
+            return NULL;
+        }
+        result->digits = new_digits;
+        result->capacity = required_size;
+    } 
+
+    for ( int i = 0; i < required_size; i++ ) {
+        result->digits[i] = 0;
+    }
+
+    for ( int i = 0; i < num1->size; i++ ) {
+        int carry = 0;
+        for ( int  j = 0; j < num2->size; j++ ) {
+            int position = i + j ;
+            int product = num1->digits[i] * num2->digits[j] + result->digits[position] + carry;
+            result->digits[position] = product % 10;
+            carry = product / 10;   
+        }
+
+        result->digits[i + num2->size] += carry;
+    }
+    result->size = required_size;
+
+    while ( result->size > 1 && result->digits[result->size - 1] == 0 ) {
+        result->size--;
+    }
+
+    result->sign = num1->sign * num2->sign;
+    return result;
+
+}
