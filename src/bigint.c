@@ -364,3 +364,244 @@ BigInt *bigint_multiply ( const BigInt *num1, const BigInt *num2 ) {
     return result;
 
 }
+
+static BigInt *bigint_append_digit ( const BigInt *num, int digit ) {
+    if ( num == NULL || digit < 0 || digit > 9 ) return NULL;
+    BigInt *result = bigint_create();
+    if ( result == NULL ) return NULL;
+
+    if ( num->size + 1 > result->capacity ) {
+        int new_capacity = num->size + 1;
+        int *new_digits = realloc(result->digits, new_capacity * sizeof(int));
+
+        if ( new_digits == NULL ) {
+            bigint_free(result);
+            return NULL;
+        }
+        result->digits = new_digits;
+        result->capacity = new_capacity;
+    }
+
+    for ( int i = num->size - 1; i >= 0; i-- ) {
+        result->digits[i + 1] = num->digits[i];
+    }
+    result->digits[0] = digit;
+    result->size = num->size + 1;
+    while (result->size > 1 &&
+           result->digits[result->size - 1] == 0) {
+        result->size--;
+    }
+    result->sign = num->sign;
+    return result;
+}
+
+static BigInt *bigint_multiply_by_digit ( const BigInt *num, int digit ) {
+    if ( num == NULL || digit < 0 || digit > 9 ) return NULL;
+    BigInt *result = bigint_create();
+    if ( result == NULL ) return NULL;
+    if ( num->size + 1 > result->capacity ) {
+        int *new_digits = realloc(result->digits, (num->size + 1) * sizeof(int));
+        if ( new_digits == NULL ) {
+            bigint_free(result);
+            return NULL;
+        }
+        result->digits = new_digits;
+        result->capacity = num->size + 1;
+    }
+    int carry = 0;
+    for ( int i = 0; i < num->size; i++ ) {
+        int product = num->digits[i] * digit + carry;
+        result->digits[i] = product % 10;
+        carry = product / 10;
+    }
+    result->size = num->size;
+    if ( carry > 0 ) {
+        result->digits[result->size] = carry;
+        result->size++;
+    }
+    result->sign = num->sign;
+    return result;
+}
+
+
+BigInt *bigint_divide( const BigInt *num1, const BigInt *num2 )
+{
+    if (num1 == NULL || num2 == NULL) {
+        return NULL;
+    }
+
+    /*
+     * Division by zero check
+     */
+    if (num2->size == 1 &&
+        num2->digits[0] == 0) {
+        return NULL;
+    }
+
+    /*
+     * Quotient starts at zero.
+     */
+    BigInt *quotient =
+        bigint_from_string("0");
+
+    if (quotient == NULL) {
+        return NULL;
+    }
+
+    /*
+     * Current remainder starts at zero.
+     */
+    BigInt *remainder =
+        bigint_from_string("0");
+
+    if (remainder == NULL) {
+        bigint_free(quotient);
+        return NULL;
+    }
+
+    /*
+     * Make enough space for quotient.
+     */
+    if (num1->size > quotient->capacity) {
+
+        int *new_digits = realloc(
+            quotient->digits,
+            num1->size * sizeof(int)
+        );
+
+        if (new_digits == NULL) {
+            bigint_free(quotient);
+            bigint_free(remainder);
+            return NULL;
+        }
+
+        quotient->digits = new_digits;
+        quotient->capacity = num1->size;
+    }
+
+    /*
+     * Initialize quotient digits.
+     */
+    quotient->size = num1->size;
+
+    for (int i = 0; i < quotient->size; i++) {
+        quotient->digits[i] = 0;
+    }
+
+    /*
+     * Long division.
+     *
+     * Process dividend from left to right.
+     *
+     * Since digits are stored reversed,
+     * we go from size - 1 down to 0.
+     */
+    for (int i = num1->size - 1; i >= 0; i--) {
+
+        /*
+         * remainder = remainder * 10
+         *             + current digit
+         */
+        BigInt *new_remainder =
+            bigint_append_digit(
+                remainder,
+                num1->digits[i]
+            );
+
+        if (new_remainder == NULL) {
+            bigint_free(quotient);
+            bigint_free(remainder);
+            return NULL;
+        }
+
+        bigint_free(remainder);
+        remainder = new_remainder;
+
+        /*
+         * Find largest digit from 0 to 9
+         * such that:
+         *
+         * num2 * digit <= remainder
+         */
+        int quotient_digit = 0;
+
+        for (int digit = 9; digit >= 0; digit--) {
+
+            BigInt *product =
+                bigint_multiply_by_digit(
+                    num2,
+                    digit
+                );
+
+            if (product == NULL) {
+                bigint_free(quotient);
+                bigint_free(remainder);
+                return NULL;
+            }
+
+            int comparison =
+                bigint_compare_abs(
+                    product,
+                    remainder
+                );
+
+            if (comparison <= 0) {
+
+                quotient_digit = digit;
+
+                BigInt *new_remainder =
+                    bigint_sub_abs(
+                        remainder,
+                        product
+                    );
+
+                bigint_free(product);
+
+                if (new_remainder == NULL) {
+                    bigint_free(quotient);
+                    bigint_free(remainder);
+                    return NULL;
+                }
+
+                bigint_free(remainder);
+                remainder = new_remainder;
+
+                break;
+            }
+
+            bigint_free(product);
+        }
+
+        /*
+         * Store quotient digit.
+         */
+        quotient->digits[i] =
+            quotient_digit;
+    }
+
+    /*
+     * Remove leading zeroes.
+     */
+    while (quotient->size > 1 &&
+           quotient->digits[quotient->size - 1] == 0) {
+        quotient->size--;
+    }
+
+    /*
+     * Determine sign.
+     */
+    quotient->sign =
+        num1->sign * num2->sign;
+
+    /*
+     * Zero is always positive.
+     */
+    if (quotient->size == 1 &&
+        quotient->digits[0] == 0) {
+        quotient->sign = 1;
+    }
+
+    bigint_free(remainder);
+
+    return quotient;
+}
