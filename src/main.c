@@ -163,8 +163,8 @@ int main(void)
 
     // Division of 2 BigInt Numbers:
 
-    BigInt *number1 = bigint_from_string("130");
-    BigInt *number2 = bigint_from_string("0");
+    BigInt *number1 = bigint_from_string("-100");
+    BigInt *number2 = bigint_from_string("7");
 
     if ( number1 == NULL || number2 == NULL ) {
         printf("Failed to create BigInt\n");

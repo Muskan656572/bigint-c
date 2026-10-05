@@ -382,7 +382,7 @@ static BigInt *bigint_append_digit ( const BigInt *num, int digit ) {
         result->capacity = new_capacity;
     }
 
-    for ( int i = num->size - 1; i >= 0; i-- ) {
+    for (int i = 0; i < num->size; i++) {
         result->digits[i + 1] = num->digits[i];
     }
     result->digits[0] = digit;
