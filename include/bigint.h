@@ -17,4 +17,5 @@ BigInt *bigint_add(const BigInt *num1, const BigInt *num2);
 BigInt *bigint_substract(const BigInt *num1, const BigInt *num2);
 BigInt *bigint_multiply(const BigInt *num1, const BigInt *num2);
 BigInt *bigint_divide(const BigInt *num1, const BigInt *num2);
+BigInt *bigint_modulo(const BigInt *num1, const BigInt *num2);
 #endif

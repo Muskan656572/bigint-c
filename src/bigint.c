@@ -605,3 +605,38 @@ BigInt *bigint_divide( const BigInt *num1, const BigInt *num2 )
 
     return quotient;
 }
+
+BigInt *bigint_modulo ( const BigInt *num1, const BigInt *num2 ) {
+     
+
+    // dividend = (divisor * quotient) + remainder
+    // remainder = dividend - (divisor * quotient)
+    // remainder = num1 - (num2 * (num1 / num2))
+    if ( num1 == NULL || num2 == NULL ) return NULL;
+
+    // Division by zero check
+    if ( num2->size == 1 &&  num2->digits[0] == 0 ) {
+        return NULL;
+    }
+
+    BigInt *quotient = bigint_divide(num1, num2);
+
+    if ( quotient == NULL ) return NULL;
+
+    BigInt *product = bigint_multiply(num2, quotient);
+    if ( product == NULL ) {
+        bigint_free(quotient);
+        return NULL;
+    }
+
+    BigInt *remainder = bigint_substract(num1, product);
+    if ( remainder == NULL ) {
+        bigint_free(quotient);
+        bigint_free(product);
+        return NULL;
+    } 
+
+    bigint_free(quotient);
+    bigint_free(product);
+    return remainder;
+}

@@ -163,8 +163,37 @@ int main(void)
 
     // Division of 2 BigInt Numbers:
 
-    BigInt *number1 = bigint_from_string("-100");
-    BigInt *number2 = bigint_from_string("7");
+    // BigInt *number1 = bigint_from_string("-100");
+    // BigInt *number2 = bigint_from_string("7");
+
+    // if ( number1 == NULL || number2 == NULL ) {
+    //     printf("Failed to create BigInt\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // BigInt *result = bigint_divide(number1, number2);
+    // if ( result == NULL ) {
+    //     printf("Division failed\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // printf("Number1 = ");
+    // bigint_print(number1);
+    // printf("\nNumber2 = ");
+    // bigint_print(number2);
+    // printf("\nNumber1 / number2 = ");
+    // bigint_print(result);
+
+// ----------------------------------------------------------------------------------------------------------------
+
+    // Modulo of 2 BigInt Numbers:
+
+    BigInt *number1 = bigint_from_string("123456789123456789");
+    BigInt *number2 = bigint_from_string("12345");
 
     if ( number1 == NULL || number2 == NULL ) {
         printf("Failed to create BigInt\n");
@@ -173,9 +202,9 @@ int main(void)
         return 1;
     }
 
-    BigInt *result = bigint_divide(number1, number2);
+    BigInt *result = bigint_modulo(number1, number2);
     if ( result == NULL ) {
-        printf("Division failed\n");
+        printf("Modulo failed\n");
         bigint_free(number1);
         bigint_free(number2);
         return 1;
@@ -185,7 +214,6 @@ int main(void)
     bigint_print(number1);
     printf("\nNumber2 = ");
     bigint_print(number2);
-    printf("\nNumber1 / number2 = ");
+    printf("\nNumber1 %% Number2 = ");
     bigint_print(result);
-
 }
