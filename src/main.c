@@ -192,28 +192,54 @@ int main(void)
 
     // Modulo of 2 BigInt Numbers:
 
-    BigInt *number1 = bigint_from_string("123456789123456789");
-    BigInt *number2 = bigint_from_string("12345");
+    // BigInt *number1 = bigint_from_string("123456789123456789");
+    // BigInt *number2 = bigint_from_string("12345");
 
-    if ( number1 == NULL || number2 == NULL ) {
+    // if ( number1 == NULL || number2 == NULL ) {
+    //     printf("Failed to create BigInt\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // BigInt *result = bigint_modulo(number1, number2);
+    // if ( result == NULL ) {
+    //     printf("Modulo failed\n");
+    //     bigint_free(number1);
+    //     bigint_free(number2);
+    //     return 1;
+    // }
+
+    // printf("Number1 = ");
+    // bigint_print(number1);
+    // printf("\nNumber2 = ");
+    // bigint_print(number2);
+    // printf("\nNumber1 %% Number2 = ");
+    // bigint_print(result);
+
+// -----------------------------------------------------------------------------------------------------------------
+
+    // Power of a BigInt number:
+
+    BigInt *base = bigint_from_string("3");
+    if ( base == NULL ) {
         printf("Failed to create BigInt\n");
-        bigint_free(number1);
-        bigint_free(number2);
         return 1;
     }
 
-    BigInt *result = bigint_modulo(number1, number2);
+    BigInt *result = bigint_power(base, 0);
+
     if ( result == NULL ) {
-        printf("Modulo failed\n");
-        bigint_free(number1);
-        bigint_free(number2);
+        printf("Power calculation failed\n");
+        bigint_free(base);
         return 1;
     }
 
-    printf("Number1 = ");
-    bigint_print(number1);
-    printf("\nNumber2 = ");
-    bigint_print(number2);
-    printf("\nNumber1 %% Number2 = ");
+    printf("Base= ");
+    bigint_print(base);
+    printf("\nExponent= %d", 0);
+    printf("\nPower= ");
     bigint_print(result);
+    printf("\n");
+    return 0;
 }

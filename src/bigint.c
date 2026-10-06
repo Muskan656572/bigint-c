@@ -640,3 +640,26 @@ BigInt *bigint_modulo ( const BigInt *num1, const BigInt *num2 ) {
     bigint_free(product);
     return remainder;
 }
+
+BigInt *bigint_power ( const BigInt *base, int exponent ) {
+
+    if ( base == NULL || exponent < 0 ) {
+        return NULL;
+    }
+
+    BigInt *result = bigint_from_string("1");
+    if ( result == NULL ) return NULL;
+
+    for ( int i = 0; i < exponent; i++ ) {
+        BigInt *new_result = bigint_multiply(result, base);
+
+        if ( new_result == NULL ) {
+            bigint_free(result);
+            return NULL;
+        }
+
+        bigint_free(result);
+        result = new_result;
+    }
+    return result;
+}
