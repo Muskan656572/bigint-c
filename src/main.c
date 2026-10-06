@@ -221,25 +221,49 @@ int main(void)
 
     // Power of a BigInt number:
 
-    BigInt *base = bigint_from_string("3");
-    if ( base == NULL ) {
+    // BigInt *base = bigint_from_string("3");
+    // if ( base == NULL ) {
+    //     printf("Failed to create BigInt\n");
+    //     return 1;
+    // }
+
+    // BigInt *result = bigint_power(base, 0);
+
+    // if ( result == NULL ) {
+    //     printf("Power calculation failed\n");
+    //     bigint_free(base);
+    //     return 1;
+    // }
+
+    // printf("Base= ");
+    // bigint_print(base);
+    // printf("\nExponent= %d", 0);
+    // printf("\nPower= ");
+    // bigint_print(result);
+    // printf("\n");
+
+// ------------------------------------------------------------------------------------------------------------------
+
+    // Factorial of a BigInt number:
+
+    BigInt *number = bigint_from_string("1");
+
+    if ( number == NULL ) {
         printf("Failed to create BigInt\n");
         return 1;
     }
+    BigInt *factorial_output = bigint_factorial(number);
 
-    BigInt *result = bigint_power(base, 0);
-
-    if ( result == NULL ) {
-        printf("Power calculation failed\n");
-        bigint_free(base);
+    if ( factorial_output == NULL ) {
+        printf("Factorial calculation failed\n");
+        bigint_free(number);
         return 1;
     }
 
-    printf("Base= ");
-    bigint_print(base);
-    printf("\nExponent= %d", 0);
-    printf("\nPower= ");
-    bigint_print(result);
+    printf("Number= ");
+    bigint_print(number);
+    printf("Factorial= ");
+    bigint_print(factorial_output);
     printf("\n");
     return 0;
 }

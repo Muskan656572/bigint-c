@@ -663,3 +663,51 @@ BigInt *bigint_power ( const BigInt *base, int exponent ) {
     }
     return result;
 }
+
+BigInt *bigint_factorial ( const BigInt *num ) {
+
+    if ( num == NULL || num->sign == -1 ) {
+        return NULL;
+    }
+
+    BigInt *result = bigint_from_string("1");
+    if ( result == NULL ) return NULL;
+
+    BigInt *counter = bigint_from_string("2");
+    if ( counter == NULL ) {
+        bigint_free(result);
+        return NULL;
+    }
+
+    while ( bigint_compare(counter, num) <= 0 ) {
+        BigInt *new_result = bigint_multiply(result, counter);
+
+        if ( new_result == NULL ) {
+            bigint_free(result);
+            bigint_free(counter);
+            return NULL;
+        }
+
+        bigint_free(result);
+        result = new_result;
+        BigInt *one = bigint_from_string("1");
+        if ( one == NULL ) {
+            bigint_free(result);
+            bigint_free(counter);
+            return NULL;
+        }
+
+        BigInt *new_counter = bigint_add(counter, one);
+        bigint_free(one);
+        bigint_free(counter);
+        if ( new_counter == NULL ) {
+            bigint_free(result);
+            return NULL;
+        }
+        counter = new_counter;
+        
+    }
+    bigint_free(counter);
+    return result;
+
+}
